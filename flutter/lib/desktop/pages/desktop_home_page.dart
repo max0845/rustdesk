@@ -91,182 +91,175 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       decoration: TextDecoration.none,
     );
     return Stack(
-        children: [
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.5 - 200,
-            left: MediaQuery.of(context).size.width * 0.5 - 100,
-            child: Column(
-              children: [
-                Image.asset('assets/logo.png', width: 200, height: 200),
-                Obx(
-                  () =>
-                      _qrcode.value.isNotEmpty
-                          ? QrImageView(
-                            data: _qrcode.value,
-                            version: QrVersions.auto,
-                            size: 200.0,
-                          )
-                          : const SizedBox(),
-                ),
-                Obx(
-                  () =>
-                      _token.value.isNotEmpty
-                          ? Container(
-                            width: 200,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Positioned(
+          top: MediaQuery.of(context).size.height * 0.5 - 200,
+          left: MediaQuery.of(context).size.width * 0.5 - 100,
+          child: Column(
+            children: [
+              Image.asset('assets/logo.png', width: 200, height: 200),
+              Obx(
+                () => _qrcode.value.isNotEmpty
+                    ? QrImageView(
+                        data: _qrcode.value,
+                        version: QrVersions.auto,
+                        size: 200.0,
+                      )
+                    : const SizedBox(),
+              ),
+              Obx(
+                () => _token.value.isNotEmpty
+                    ? Container(
+                        width: 200,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "无人值守",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                decoration: TextDecoration.none,
+                              ),
+                            ).marginOnly(left: 10),
+                            SizedBox(
+                              width: 40,
+                              height: 20,
+                              child: FlutterSwitch(
+                                toggleSize: 20.0,
+                                value: _on1.value,
+                                onToggle: (bool value) {
+                                  _on1.value = value;
+                                  if (value) {
+                                    _on2.value = true;
+                                  }
+                                },
+                              ),
+                            ).marginOnly(right: 10),
+                          ],
+                        ),
+                      )
+                    : const SizedBox(),
+              ),
+              const SizedBox(height: 15),
+              Obx(
+                () => _token.value.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () {
+                          if (_on1.value) return;
+                          _on2.value = !_on2.value;
+                        },
+                        child: Container(
+                          width: 150,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: _on2.value
+                                ? Colors.redAccent
+                                : Colors.blueAccent,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: _on2.value
+                                ? MainAxisAlignment.spaceBetween
+                                : MainAxisAlignment.center,
+                            children: [
+                              _on2.value
+                                  ? Icon(
+                                      Icons.punch_clock_outlined,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ).marginOnly(left: 10)
+                                  : const SizedBox(),
+                              Text(
+                                _on2.value ? "关闭服务" : "开启服务",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ).marginOnly(right: 10),
+                            ],
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+              ),
+            ],
+          ),
+        ),
+        Obx(
+          () => _token.value.isNotEmpty
+              ? Positioned(
+                  top: 25,
+                  left: 100,
+                  child: GestureDetector(
+                    child: Image.asset(
+                      'assets/unlink.png',
+                      width: 20,
+                      height: 20,
+                    ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Row(
                               children: [
-                                const Text(
-                                  "无人值守",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ).marginOnly(left: 10),
-                                SizedBox(
-                                  width: 40,
-                                  height: 20,
-                                  child: FlutterSwitch(
-                                    toggleSize: 20.0,
-                                    value: _on1.value,
-                                    onToggle: (bool value) {
-                                      _on1.value = value;
-                                      if (value) {
-                                        _on2.value = true;
-                                      }
-                                    },
-                                  ),
-                                ).marginOnly(right: 10),
+                                Icon(Icons.info),
+                                const SizedBox(width: 15),
+                                const Text("确定解除绑定"),
                               ],
                             ),
-                          )
-                          : const SizedBox(),
-                ),
-                const SizedBox(height: 15),
-                Obx(
-                  () =>
-                      _token.value.isNotEmpty
-                          ? GestureDetector(
-                            onTap: () {
-                              if (_on1.value) return;
-                              _on2.value = !_on2.value;
-                            },
-                            child: Container(
-                              width: 150,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color:
-                                    _on2.value
-                                        ? Colors.redAccent
-                                        : Colors.blueAccent,
-                                borderRadius: BorderRadius.circular(8),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  canaelBind();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("确定"),
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    _on2.value
-                                        ? MainAxisAlignment.spaceBetween
-                                        : MainAxisAlignment.center,
-                                children: [
-                                  _on2.value
-                                      ? Icon(
-                                        Icons.punch_clock_outlined,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ).marginOnly(left: 10)
-                                      : const SizedBox(),
-                                  Text(
-                                    _on2.value ? "关闭服务" : "开启服务",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      decoration: TextDecoration.none,
-                                    ),
-                                  ).marginOnly(right: 10),
-                                ],
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("取消"),
                               ),
-                            ),
-                          )
-                          : const SizedBox(),
-                ),
-              ],
-            ),
-          ),
-          Obx(
-            () =>
-                _token.value.isNotEmpty
-                    ? Positioned(
-                      top: 25,
-                      left: 100,
-                      child: GestureDetector(
-                        child: Image.asset(
-                          'assets/unlink.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Row(
-                                  children: [
-                                    Icon(Icons.info),
-                                    const SizedBox(width: 15),
-                                    const Text("确定解除绑定"),
-                                  ],
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      canaelBind();
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("确定"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(); 
-                                    },
-                                    child: const Text("取消"),
-                                  ),
-                                ],
-                              );
-                            },
+                            ],
                           );
                         },
-                      ),
-                    )
-                    : const SizedBox(),
-          ),
-          Obx(
-            () =>
-                _token.value.isNotEmpty
-                    ? Positioned(
-                      bottom: 20,
-                      left: 50,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //Text("门店ID: ${_orgId.value}", style: style),
-                          Text("门店编号: ${_orgNo.value}", style: style),
-                          Text("门店名称: ${_orgName.value}", style: style),
-                          Text("clientNo: ${_clientNo.value}", style: style),
-                          Text("位置描述: ${_location.value}", style: style),
-                          Text("id: ${_id.value}", style: style),
-                          Text("pw: ${_pw.value}", style: style),
-                        ],
-                      ),
-                    )
-                    : const SizedBox(),
-          ),
-        ],
-      ),
+                      );
+                    },
+                  ),
+                )
+              : const SizedBox(),
+        ),
+        Obx(
+          () => _token.value.isNotEmpty
+              ? Positioned(
+                  bottom: 20,
+                  left: 50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //Text("门店ID: ${_orgId.value}", style: style),
+                      Text("门店编号: ${_orgNo.value}", style: style),
+                      Text("门店名称: ${_orgName.value}", style: style),
+                      Text("clientNo: ${_clientNo.value}", style: style),
+                      Text("位置描述: ${_location.value}", style: style),
+                      Text("id: ${_id.value}", style: style),
+                      Text("pw: ${_pw.value}", style: style),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
+        ),
+      ],
+    );
   }
 
   bool busy = false;

@@ -214,12 +214,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       if (bind.isCustomClient())
         Align(alignment: Alignment.center, child: loadPowered(context)),
       Align(alignment: Alignment.center, child: loadLogo()),
-      buildTip(context),
       if (!isOutgoingOnly) buildIDBoard(context),
-      if (!isOutgoingOnly) buildPasswordBoard(context),
       FutureBuilder<Widget>(
         future: Future.value(
-          Obx(() => buildHelpCards(stateGlobal.updateUrl.value)),
+          Obx(() => const SizedBox()),
         ),
         builder: (_, data) {
           if (data.hasData) {
@@ -344,7 +342,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                             ).textTheme.titleLarge?.color?.withOpacity(0.5),
                           ),
                         ).marginOnly(top: 5),
-                        buildPopupMenu(context),
                       ],
                     ),
                   ),

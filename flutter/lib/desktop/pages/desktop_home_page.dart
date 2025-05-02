@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hbb/common.dart';
@@ -18,6 +20,7 @@ import 'package:flutter_hbb/models/state_model.dart';
 import 'package:flutter_hbb/plugin/ui_manager.dart';
 import 'package:flutter_hbb/utils/multi_window_manager.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
@@ -56,8 +59,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   final GlobalKey _childKey = GlobalKey();
 
   final box = GetStorage();
-  final RxBool _editHover = false.obs;
-  final RxBool _block = false.obs;
   final RxString _qrcode = ''.obs;
   final RxString _qrcodeID = ''.obs;
   final RxString _message = ''.obs;

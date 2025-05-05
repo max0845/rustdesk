@@ -31,7 +31,8 @@ import 'package:window_size/window_size.dart' as window_size;
 import '../widgets/button.dart';
 
 class DesktopHomePage extends StatefulWidget {
-  const DesktopHomePage({Key? key}) : super(key: key);
+  final List<String>? arg;
+  const DesktopHomePage({Key? key, this.arg}) : super(key: key);
 
   @override
   State<DesktopHomePage> createState() => _DesktopHomePageState();
@@ -59,7 +60,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   final RxBool _block = false.obs;
 
   final GlobalKey _childKey = GlobalKey();
-
+  final RxList<String> _arg = <String>[].obs;
   final box = GetStorage();
   final RxString _qrcode = ''.obs;
   final RxString _qrcodeID = ''.obs;
@@ -98,6 +99,17 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           child: Column(
             children: [
               Image.asset('assets/logo.png', width: 200, height: 200),
+              Obx(() => _arg.isNotEmpty
+                  ? AutoSizeText(
+                      _arg[0],
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        decoration: TextDecoration.none,
+                      ),
+                    )
+                  : const SizedBox()),
               Obx(
                 () => _qrcode.value.isNotEmpty
                     ? QrImageView(
@@ -548,6 +560,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   void initState() {
     super.initState();
+    if (widget.arg != null) {
+      _arg.value = widget.arg!;
+      return;
+    }
     _token.value = box.read('token') ?? "";
     if (_token.value.isNotEmpty) {
       _orgId.value = box.read('orgId') ?? "";

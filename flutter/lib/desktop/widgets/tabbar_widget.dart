@@ -94,6 +94,7 @@ CancelFunc showRightMenu(ToastBuilder builder,
 class DesktopTabController {
   final state = DesktopTabState().obs;
   final DesktopTabType tabType;
+  List<String> arg = List.empty(growable: true);
 
   /// index, key
   Function(int, String)? onRemoved;
@@ -103,6 +104,16 @@ class DesktopTabController {
       {required this.tabType, this.onRemoved, this.onSelected});
 
   int get length => state.value.tabs.length;
+
+  void setArg(List<String>? arg) {
+    if (arg != null) {
+      this.arg = arg;
+    }
+  }
+
+  List<String> getArg() {
+    return arg;
+  }
 
   void add(TabInfo tab) {
     if (!isDesktop) return;

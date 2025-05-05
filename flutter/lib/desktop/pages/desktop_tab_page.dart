@@ -53,7 +53,6 @@ class _DesktopTabPageState extends State<DesktopTabPage> {
         closable: false,
         page: DesktopHomePage(
           key: const ValueKey(kTabLabelHomePage),
-          //arg: widget.arg,
         )));
     if (bind.isIncomingOnly()) {
       tabController.onSelected = (key) {
@@ -71,6 +70,7 @@ class _DesktopTabPageState extends State<DesktopTabPage> {
   @override
   void initState() {
     super.initState();
+    tabController.setArg(widget.arg);
     // HardwareKeyboard.instance.addHandler(_handleKeyEvent);
   }
 

@@ -13,9 +13,9 @@ import 'package:window_manager/window_manager.dart';
 import '../../common/shared_state.dart';
 
 class DesktopTabPage extends StatefulWidget {
-  //final List<String>? arg;
-  //const DesktopTabPage({Key? key,this.arg}) : super(key: key);
-  const DesktopTabPage({Key? key}) : super(key: key);
+  final List<String>? arg;
+  const DesktopTabPage({Key? key, this.arg}) : super(key: key);
+  //const DesktopTabPage({Key? key}) : super(key: key);
 
   @override
   State<DesktopTabPage> createState() => _DesktopTabPageState();

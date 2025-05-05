@@ -31,8 +31,9 @@ import 'package:window_size/window_size.dart' as window_size;
 import '../widgets/button.dart';
 
 class DesktopHomePage extends StatefulWidget {
-  final List<String>? arg;
-  const DesktopHomePage({Key? key, this.arg}) : super(key: key);
+  // final List<String>? arg;
+  // const DesktopHomePage({Key? key, this.arg}) : super(key: key);
+  const DesktopHomePage({Key? key}) : super(key: key);
 
   @override
   State<DesktopHomePage> createState() => _DesktopHomePageState();
@@ -560,10 +561,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   void initState() {
     super.initState();
-    if (widget.arg != null) {
-      _arg.value = widget.arg!;
-      return;
-    }
+    // if (widget.arg != null) {
+    //   _arg.value = widget.arg!;
+    //   return;
+    // }
     _token.value = box.read('token') ?? "";
     if (_token.value.isNotEmpty) {
       _orgId.value = box.read('orgId') ?? "";

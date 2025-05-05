@@ -108,7 +108,7 @@ Future<void> main(List<String> args) async {
     if (isMacOS) {
       disableWindowMovable(kWindowId);
     }
-    runMainApp(true);
+    runMainApp(true, arg: kBootArgs);
   }
 }
 
@@ -125,7 +125,7 @@ Future<void> initEnv(String appType) async {
   updateSystemWindowTheme();
 }
 
-void runMainApp(bool startService) async {
+void runMainApp(bool startService, {List<String>? arg}) async {
   // register uni links
   await initEnv(kAppTypeMain);
   checkUpdate();
@@ -138,7 +138,7 @@ void runMainApp(bool startService) async {
   }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App());
+  runApp(App(arg: arg));
 
   // Set window option.
   WindowOptions windowOptions =
@@ -402,6 +402,8 @@ WindowOptions getHiddenTitleBarWindowOptions(
 }
 
 class App extends StatefulWidget {
+  final List<String>? arg;
+  const App({Key? key, this.arg}) : super(key: key);
   @override
   State<App> createState() => _AppState();
 }

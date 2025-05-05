@@ -101,17 +101,18 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           child: Column(
             children: [
               Image.asset('assets/logo.png', width: 200, height: 200),
-              Obx(() => _arg.isNotEmpty
-                  ? AutoSizeText(
-                      _arg[0],
-                      maxLines: 1,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        decoration: TextDecoration.none,
-                      ),
-                    )
-                  : const SizedBox()),
+              Obx(() => ListView(
+                    children: _arg
+                        .map((e) => Text(
+                              e,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                decoration: TextDecoration.none,
+                              ),
+                            ))
+                        .toList(),
+                  )),
               Obx(
                 () => _qrcode.value.isNotEmpty
                     ? QrImageView(
@@ -565,9 +566,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
     DesktopTabController ctrl = Get.find<DesktopTabController>();
     _arg.value = ctrl.getArg();
-    if (_arg.isNotEmpty) {
-      return;
-    }
     _token.value = box.read('token') ?? "";
     if (_token.value.isNotEmpty) {
       _orgId.value = box.read('orgId') ?? "";

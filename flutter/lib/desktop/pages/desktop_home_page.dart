@@ -101,18 +101,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           child: Column(
             children: [
               Image.asset('assets/logo.png', width: 200, height: 200),
-              Obx(() => ListView(
-                    children: _arg
-                        .map((e) => Text(
-                              e,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                decoration: TextDecoration.none,
-                              ),
-                            ))
-                        .toList(),
-                  )),
               Obx(
                 () => _qrcode.value.isNotEmpty
                     ? QrImageView(
@@ -563,7 +551,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   void initState() {
     super.initState();
-
     DesktopTabController ctrl = Get.find<DesktopTabController>();
     _arg.value = ctrl.getArg();
     _token.value = box.read('token') ?? "";
@@ -579,10 +566,12 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         _pw.value = v[0];
       });
     } else {
-      var model = gFFI.serverModel;
-      model.getInfo().then((v) {
-        fetchQRCode(v[1], v[0]);
-      });
+      if (_arg.isEmpty) {
+        var model = gFFI.serverModel;
+        model.getInfo().then((v) {
+          fetchQRCode(v[1], v[0]);
+        });
+      }
     }
     _updateTimer = periodic_immediate(const Duration(seconds: 1), () async {
       await gFFI.serverModel.fetchID();

@@ -549,6 +549,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     DesktopTabController ctrl = Get.find<DesktopTabController>();
     if (ctrl.arg != null) {
       _arg.value = ctrl.arg!;
+      List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
+      connect(context, parm[0],
+          isFileTransfer: false, isViewCamera: false, password: parm[1]);
     }
     _token.value = box.read('token') ?? "";
     if (_token.value.isNotEmpty) {

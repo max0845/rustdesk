@@ -360,6 +360,13 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               _location.value = value.data['data']['location'];
               _id.value = id;
               _pw.value = pw;
+
+              box.write('token', _token.value);
+              box.write('orgId', _orgId.value);
+              box.write('orgNo', _orgNo.value);
+              box.write('orgName', _orgName.value);
+              box.write('clientNo', _clientNo.value);
+              box.write('location', _location.value);
             }
           }).catchError((e) {
             debugPrint(e.toString());

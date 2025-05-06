@@ -101,6 +101,14 @@ Future<void> main(List<String> args) async {
     runConnectionManagerScreen();
   } else if (args.contains('--install')) {
     runInstallPage();
+  } else if (args.isNotEmpty && args.first.contains("connect://")) {
+    desktopType = DesktopType.main;
+    await windowManager.ensureInitialized();
+    windowManager.setPreventClose(true);
+    if (isMacOS) {
+      disableWindowMovable(kWindowId);
+    }
+    runApp2();
   } else {
     desktopType = DesktopType.main;
     await windowManager.ensureInitialized();
@@ -108,8 +116,22 @@ Future<void> main(List<String> args) async {
     if (isMacOS) {
       disableWindowMovable(kWindowId);
     }
-    runMainApp(true, arg: kBootArgs);
+    runMainApp(true);
   }
+}
+
+void runApp2() async {
+  await initEnv(kAppTypeMain);
+  checkUpdate();
+  await bind.mainCheckConnectStatus();
+
+  gFFI.serverModel.startService();
+  bind.pluginSyncUi(syncTo: kAppTypeMain);
+  bind.pluginListReload();
+
+  await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
+  gFFI.userModel.refreshCurrentUser();
+  runApp(App2());
 }
 
 Future<void> initEnv(String appType) async {
@@ -125,7 +147,7 @@ Future<void> initEnv(String appType) async {
   updateSystemWindowTheme();
 }
 
-void runMainApp(bool startService, {List<String>? arg}) async {
+void runMainApp(bool startService) async {
   // register uni links
   await initEnv(kAppTypeMain);
   checkUpdate();
@@ -138,7 +160,7 @@ void runMainApp(bool startService, {List<String>? arg}) async {
   }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App(arg: arg));
+  runApp(App());
 
   // Set window option.
   WindowOptions windowOptions =
@@ -401,9 +423,33 @@ WindowOptions getHiddenTitleBarWindowOptions(
   );
 }
 
+class App2 extends StatefulWidget {
+  const App2({Key? key}) : super(key: key);
+  @override
+  State<App2> createState() => _App2State();
+}
+
+class _App2State extends State<App2> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text("connecting...");
+  }
+}
+
 class App extends StatefulWidget {
-  final List<String>? arg;
-  const App({Key? key, this.arg}) : super(key: key);
+  const App({Key? key}) : super(key: key);
   @override
   State<App> createState() => _AppState();
 }

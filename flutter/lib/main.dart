@@ -195,6 +195,7 @@ void runMobileApp() async {
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
   runApp(App());
+
   await initUniLinks();
 }
 
@@ -326,6 +327,7 @@ showCmWindow({bool isStartup = false}) async {
   } else if (_isCmReadyToShow) {
     if (await windowManager.getOpacity() != 1) {
       await windowManager.setOpacity(1);
+
       await windowManager.focus();
       await windowManager.minimize(); //needed
       await windowManager.setSizeAlignment(
@@ -444,7 +446,29 @@ class _App2State extends State<App2> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return const Text("connecting...");
+    return RefreshWrapper(
+      builder: (context) {
+        return MultiProvider(
+          providers: [
+            // global configuration
+            // use session related FFI when in remote control or file transfer page
+            ChangeNotifierProvider.value(value: gFFI.ffiModel),
+            ChangeNotifierProvider.value(value: gFFI.imageModel),
+            ChangeNotifierProvider.value(value: gFFI.cursorModel),
+            ChangeNotifierProvider.value(value: gFFI.canvasModel),
+            ChangeNotifierProvider.value(value: gFFI.peerTabModel),
+          ],
+          child: GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: bind.mainGetAppNameSync(),
+            theme: MyTheme.lightTheme,
+            darkTheme: MyTheme.darkTheme,
+            themeMode: MyTheme.currentThemeMode(),
+            home: ServerPage(),
+          ),
+        );
+      },
+    );
   }
 }
 

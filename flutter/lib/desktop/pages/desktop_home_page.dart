@@ -99,7 +99,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           child: Column(
             children: [
               Image.asset('assets/logo.png', width: 200, height: 200),
-              Obx(() => Text("connected......",
+              Obx(() => Text(_arg.value,
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.black,
@@ -546,6 +546,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   @override
   void initState() {
     super.initState();
+
     DesktopTabController ctrl = Get.find<DesktopTabController>();
     if (ctrl.arg != null) {
       _arg.value = ctrl.arg!;

@@ -108,7 +108,7 @@ Future<void> main(List<String> args) async {
     if (isMacOS) {
       disableWindowMovable(kWindowId);
     }
-    runApp2();
+    runMainApp(true, arg: args.first);
   } else {
     desktopType = DesktopType.main;
     await windowManager.ensureInitialized();
@@ -118,20 +118,6 @@ Future<void> main(List<String> args) async {
     }
     runMainApp(true);
   }
-}
-
-void runApp2() async {
-  await initEnv(kAppTypeMain);
-  checkUpdate();
-  await bind.mainCheckConnectStatus();
-
-  gFFI.serverModel.startService();
-  bind.pluginSyncUi(syncTo: kAppTypeMain);
-  bind.pluginListReload();
-
-  await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
-  gFFI.userModel.refreshCurrentUser();
-  runApp(App2());
 }
 
 Future<void> initEnv(String appType) async {
@@ -147,7 +133,7 @@ Future<void> initEnv(String appType) async {
   updateSystemWindowTheme();
 }
 
-void runMainApp(bool startService) async {
+void runMainApp(bool startService, {String? arg}) async {
   // register uni links
   await initEnv(kAppTypeMain);
   checkUpdate();
@@ -160,7 +146,7 @@ void runMainApp(bool startService) async {
   }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App());
+  runApp(App(arg: arg));
 
   // Set window option.
   WindowOptions windowOptions =
@@ -425,55 +411,9 @@ WindowOptions getHiddenTitleBarWindowOptions(
   );
 }
 
-class App2 extends StatefulWidget {
-  const App2({Key? key}) : super(key: key);
-  @override
-  State<App2> createState() => _App2State();
-}
-
-class _App2State extends State<App2> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RefreshWrapper(
-      builder: (context) {
-        return MultiProvider(
-          providers: [
-            // global configuration
-            // use session related FFI when in remote control or file transfer page
-            ChangeNotifierProvider.value(value: gFFI.ffiModel),
-            ChangeNotifierProvider.value(value: gFFI.imageModel),
-            ChangeNotifierProvider.value(value: gFFI.cursorModel),
-            ChangeNotifierProvider.value(value: gFFI.canvasModel),
-            ChangeNotifierProvider.value(value: gFFI.peerTabModel),
-          ],
-          child: GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: bind.mainGetAppNameSync(),
-            theme: MyTheme.lightTheme,
-            darkTheme: MyTheme.darkTheme,
-            themeMode: MyTheme.currentThemeMode(),
-            home: ServerPage(),
-          ),
-        );
-      },
-    );
-  }
-}
-
 class App extends StatefulWidget {
-  const App({Key? key}) : super(key: key);
+  final String? arg;
+  const App({Key? key, this.arg}) : super(key: key);
   @override
   State<App> createState() => _AppState();
 }
@@ -557,7 +497,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           darkTheme: MyTheme.darkTheme,
           themeMode: MyTheme.currentThemeMode(),
           home: isDesktop
-              ? DesktopTabPage()
+              ? DesktopTabPage(arg: widget.arg)
               : isWeb
                   ? WebHomePage()
                   : HomePage(),

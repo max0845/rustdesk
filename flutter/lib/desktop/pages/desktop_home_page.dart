@@ -32,8 +32,6 @@ import 'package:window_size/window_size.dart' as window_size;
 import '../widgets/button.dart';
 
 class DesktopHomePage extends StatefulWidget {
-  // final List<String>? arg;
-  // const DesktopHomePage({Key? key, this.arg}) : super(key: key);
   const DesktopHomePage({Key? key}) : super(key: key);
 
   @override
@@ -62,7 +60,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   final RxBool _block = false.obs;
 
   final GlobalKey _childKey = GlobalKey();
-  final RxList<String> _arg = <String>[].obs;
+  final RxString _arg = "".obs;
   final box = GetStorage();
   final RxString _qrcode = ''.obs;
   final RxString _qrcodeID = ''.obs;
@@ -369,15 +367,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     }
   }
 
-  Widget _buildBlock({required Widget child}) {
-    return buildRemoteBlock(
-      block: _block,
-      mask: true,
-      use: canBeBlocked,
-      child: child,
-    );
-  }
-
   Widget buildLeftPane(BuildContext context) {
     final isIncomingOnly = bind.isIncomingOnly();
     final isOutgoingOnly = bind.isOutgoingOnly();
@@ -552,7 +541,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   void initState() {
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();
-    _arg.value = ctrl.getArg();
+    if (ctrl.arg != null) {
+      _arg.value = ctrl.arg!;
+    }
     _token.value = box.read('token') ?? "";
     if (_token.value.isNotEmpty) {
       _orgId.value = box.read('orgId') ?? "";

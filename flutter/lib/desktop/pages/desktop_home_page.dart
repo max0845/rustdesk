@@ -99,6 +99,12 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           child: Column(
             children: [
               Image.asset('assets/logo.png', width: 200, height: 200),
+              Obx(() => Text(_arg.value,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    decoration: TextDecoration.none,
+                  ))),
               Obx(
                 () => _qrcode.value.isNotEmpty
                     ? QrImageView(

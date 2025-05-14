@@ -13,7 +13,8 @@ import 'package:window_manager/window_manager.dart';
 import '../../common/shared_state.dart';
 
 class DesktopTabPage extends StatefulWidget {
-  const DesktopTabPage({Key? key}) : super(key: key);
+  final String? arg;
+  const DesktopTabPage({Key? key, this.arg}) : super(key: key);
 
   @override
   State<DesktopTabPage> createState() => _DesktopTabPageState();
@@ -68,6 +69,7 @@ class _DesktopTabPageState extends State<DesktopTabPage> {
   @override
   void initState() {
     super.initState();
+    tabController.arg = widget.arg;
     // HardwareKeyboard.instance.addHandler(_handleKeyEvent);
   }
 

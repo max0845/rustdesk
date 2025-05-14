@@ -98,6 +98,13 @@ class ServerModel with ChangeNotifier {
     return _temporaryPasswordLength;
   }
 
+  Future<List<String>> getInfo() async {
+    return await Future.wait([
+      bind.mainGetTemporaryPassword(),
+      bind.mainGetMyId(),
+    ]);
+  }
+
   setTemporaryPasswordLength(String length) async {
     await bind.mainSetOption(key: "temporary-password-length", value: length);
   }
@@ -817,8 +824,8 @@ class Client {
 
   RxInt unreadChatMessageCount = 0.obs;
 
-  Client(this.id, this.authorized, this.isFileTransfer, this.isViewCamera, this.name, this.peerId,
-      this.keyboard, this.clipboard, this.audio);
+  Client(this.id, this.authorized, this.isFileTransfer, this.isViewCamera,
+      this.name, this.peerId, this.keyboard, this.clipboard, this.audio);
 
   Client.fromJson(Map<String, dynamic> json) {
     id = json['id'];

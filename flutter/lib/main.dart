@@ -19,6 +19,7 @@ import 'package:flutter_hbb/models/state_model.dart';
 import 'package:flutter_hbb/utils/multi_window_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -39,7 +40,7 @@ late List<String> kBootArgs;
 Future<void> main(List<String> args) async {
   earlyAssert();
   WidgetsFlutterBinding.ensureInitialized();
-
+  await GetStorage.init();
   debugPrint("launch args: $args");
   kBootArgs = List.from(args);
 
@@ -101,6 +102,14 @@ Future<void> main(List<String> args) async {
     runConnectionManagerScreen();
   } else if (args.contains('--install')) {
     runInstallPage();
+  } else if (args.isNotEmpty && args.first.contains("connect://")) {
+    desktopType = DesktopType.main;
+    await windowManager.ensureInitialized();
+    windowManager.setPreventClose(true);
+    if (isMacOS) {
+      disableWindowMovable(kWindowId);
+    }
+    runMainApp(true, arg: args.first);
   } else {
     desktopType = DesktopType.main;
     await windowManager.ensureInitialized();
@@ -125,7 +134,7 @@ Future<void> initEnv(String appType) async {
   updateSystemWindowTheme();
 }
 
-void runMainApp(bool startService) async {
+void runMainApp(bool startService, {String? arg}) async {
   // register uni links
   await initEnv(kAppTypeMain);
   checkUpdate();
@@ -138,7 +147,7 @@ void runMainApp(bool startService) async {
   }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App());
+  runApp(App(arg: arg));
 
   // Set window option.
   WindowOptions windowOptions =
@@ -402,6 +411,8 @@ WindowOptions getHiddenTitleBarWindowOptions(
 }
 
 class App extends StatefulWidget {
+  final String? arg;
+  const App({Key? key, this.arg}) : super(key: key);
   @override
   State<App> createState() => _AppState();
 }
@@ -485,7 +496,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           darkTheme: MyTheme.darkTheme,
           themeMode: MyTheme.currentThemeMode(),
           home: isDesktop
-              ? const DesktopTabPage()
+              ? const DesktopTabPage(arg: widget.arg)
               : isWeb
                   ? WebHomePage()
                   : HomePage(),

@@ -5,7 +5,7 @@ authors = ["max0845"]
 edition = "2021"
 build= "build.rs"
 description = "Remote Desktop"
-default-run = "rustdesk"
+default-run = "CDlink"
 rust-version = "1.75"
 
 [lib]

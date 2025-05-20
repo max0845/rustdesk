@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.4.0+58
 
 environment:
-  sdk: '^3.1.0'
+  sdk: "^3.1.0"
 
 dependencies:
   flutter:
@@ -109,6 +109,7 @@ dependencies:
   dio: ^5.8.0+1
   flutter_switch: ^0.3.2
   get_storage: ^2.1.1
+  ws: ^1.0.0
 
 dev_dependencies:
   icons_launcher: ^2.0.4
@@ -121,7 +122,7 @@ dev_dependencies:
 
 dependency_overrides:
   intl: ^0.19.0
-  
+
 # rerun: flutter pub run flutter_launcher_icons
 flutter_icons:
   image_path: "../res/icon.png"
@@ -196,4 +197,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-

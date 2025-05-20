@@ -29,6 +29,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart' as window_size;
+import 'package:ws/ws.dart';
 import '../widgets/button.dart';
 
 class DesktopHomePage extends StatefulWidget {
@@ -126,15 +127,38 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     busy = false;
   }
 
+  WebSocketClient? channel;
+
+  connectWebSocket() async {
+    if (channel != null) {
+      channel = WebSocketClient(WebSocketOptions.vm(headers: {
+        'Authorization': 'Bearer ${_token.value}',
+      }));
+    }
+
+    channel!.connect("wss://test.hzhexia.com/websocket");
+
+    channel!.stream.listen((event) {
+      print(event);
+    }, onError: (error) {
+      debugPrint(error.toString());
+    }, onDone: () {
+      debugPrint("WebSocket closed");
+    });
+  }
+
   Future<void> fetchQRCode(String id, String pw) async {
     try {
       final response = await _dio.request(
         "https://test.hzhexia.com/uop/backend/remote/app/generateQrcode",
         data: {
           "appVersion": "1.0.0",
-          "customField": jsonEncode({"id": id, "password": pw}),
+          "customField": jsonEncode({
+            "id": id,
+          }),
           "mac": "00:1B:44:11:3A:B7",
           "sn": "1234567890",
+          "password": pw
         },
         options: Options(
           method: "POST",
@@ -203,6 +227,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   );
                 });
               });
+
+              connectWebSocket();
             }
           }).catchError((e) {
             debugPrint(e.toString());
@@ -231,7 +257,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           left: MediaQuery.of(context).size.width * 0.5 - 100,
           child: Column(
             children: [
-              Image.asset('assets/logo.jpg', width: 200, height: 200),
+              Image.asset('assets/logo.png', width: 200, height: 200),
               Obx(() => Text(_arg.value,
                   style: const TextStyle(
                     fontSize: 14,
@@ -1062,6 +1088,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           );
         });
       });
+      connectWebSocket();
     } else {
       if (_arg.isEmpty) {
         var model = gFFI.serverModel;
@@ -1236,6 +1263,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     Get.delete<RxBool>(tag: 'stop-service');
     _updateTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
+    channel?.close();
+    channel = null;
     super.dispose();
   }
 

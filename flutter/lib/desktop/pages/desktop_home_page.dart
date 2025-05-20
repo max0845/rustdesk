@@ -79,6 +79,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   final RxString _pw = ''.obs;
   final RxBool _on1 = false.obs;
   final RxBool _on2 = false.obs;
+  Timer? _timer3;
 
   final Dio _dio = Dio()
     ..httpClientAdapter = IOHttpClientAdapter(
@@ -136,14 +137,29 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       }));
     }
 
-    channel!.connect("wss://test.hzhexia.com/websocket");
-
     channel!.stream.listen((event) {
       print(event);
     }, onError: (error) {
       debugPrint(error.toString());
     }, onDone: () {
       debugPrint("WebSocket closed");
+    });
+
+    channel!.connect("wss://test.hzhexia.com/websocket");
+
+    channel!.add({
+      "timestamp": DateTime.now().millisecondsSinceEpoch,
+      "bizType": "cds.websocket.login1",
+      "body": jsonEncode({
+        "token": _token.value,
+      }),
+    }); // login
+
+    _timer3 = Timer.periodic(const Duration(seconds: 30), (_) {
+      channel!.add({
+        "timestamp": DateTime.now().millisecondsSinceEpoch,
+        "bizType": "cds.websocket.remoteAppHeartBeat1"
+      }); // heartbeat
     });
   }
 
@@ -417,8 +433,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                       Text("门店编号: ${_orgNo.value}", style: style),
                       Text("门店名称: ${_orgName.value}", style: style),
                       Text("位置描述: ${_location.value}", style: style),
-                      // Text("id: ${_id.value}", style: style),
-                      // Text("pw: ${_pw.value}", style: style),
+                      Text("id: ${_id.value}", style: style),
+                      Text("pw: ${_pw.value}", style: style),
                     ],
                   ),
                 )
@@ -1265,6 +1281,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     WidgetsBinding.instance.removeObserver(this);
     channel?.close();
     channel = null;
+    _timer2?.cancel();
+    _timer3?.cancel();
     super.dispose();
   }
 

@@ -1,11 +1,11 @@
 [package]
-name = "CDlink"
+name = "rustdesk"
 version = "1.4.0"
 authors = ["max0845"]
 edition = "2021"
 build= "build.rs"
 description = "Remote Desktop"
-default-run = "CDlink"
+default-run = "rustdesk"
 rust-version = "1.75"
 
 [lib]
@@ -190,9 +190,9 @@ exclude = ["vdi/host", "examples/custom_plugin"]
 
 [package.metadata.winres]
 LegalCopyright = "Copyright © 2025 Purslane Ltd. All rights reserved."
-ProductName = "RustDesk"
-FileDescription = "RustDesk Remote Desktop"
-OriginalFilename = "rustdesk.exe"
+ProductName = "CDlink"
+FileDescription = "CDlink Remote Desktop"
+OriginalFilename = "CDlink.exe"
 
 [target.'cfg(target_os="windows")'.build-dependencies]
 winres = "0.1"

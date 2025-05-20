@@ -1,10 +1,10 @@
 [package]
-name = "rustdesk"
+name = "CDlink"
 version = "1.4.0"
-authors = ["rustdesk <info@rustdesk.com>"]
+authors = ["max0845"]
 edition = "2021"
 build= "build.rs"
-description = "RustDesk Remote Desktop"
+description = "Remote Desktop"
 default-run = "rustdesk"
 rust-version = "1.75"
 
@@ -208,9 +208,9 @@ hound = "3.5"
 docopt = "1.1"
 
 [package.metadata.bundle]
-name = "RustDesk"
-identifier = "com.carriez.rustdesk"
-icon = ["res/32x32.png", "res/128x128.png", "res/128x128@2x.png"]
+name = "CDlink"
+identifier = "com.CDlink"
+icon = ["res/32x32.jpg", "res/128x128.jpg", "res/128x128@2x.jpg"]
 osx_minimum_system_version = "10.14"
 
 #https://github.com/johnthagen/min-sized-rust

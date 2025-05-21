@@ -133,7 +133,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   connectWebSocket() async {
     if (channel != null) {
       channel = WebSocketClient(WebSocketOptions.vm(headers: {
-        'Authorization': 'Bearer ${_token.value}',
+        'Authorization': _token.value,
       }));
     }
 
@@ -237,7 +237,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         Headers.contentTypeHeader:
                             'application/json;charset=utf-8',
                         Headers.acceptHeader: '*/*',
-                        Headers.wwwAuthenticateHeader: 'Bearer ${_token.value}',
+                        Headers.wwwAuthenticateHeader: _token.value,
                       },
                     ),
                   );
@@ -1098,7 +1098,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               headers: {
                 Headers.contentTypeHeader: 'application/json;charset=utf-8',
                 Headers.acceptHeader: '*/*',
-                Headers.wwwAuthenticateHeader: 'Bearer ${_token.value}',
+                Headers.wwwAuthenticateHeader: _token.value,
               },
             ),
           );

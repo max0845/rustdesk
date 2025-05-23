@@ -240,9 +240,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               box.write('clientNo', _clientNo.value);
               box.write('location', _location.value);
 
-              _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
-                sendPassword(gFFI.serverModel, _dio, _token.value);
-              });
+              // _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
+              // sendPassword(gFFI.serverModel, _dio, _token.value);
+              // });
               sendPassword(gFFI.serverModel, _dio, _token.value);
               connectWebSocket();
             }
@@ -1087,9 +1087,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         _id.value = v[1];
         _pw.value = v[0];
       });
-      _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
-        sendPassword(gFFI.serverModel, _dio, _token.value);
-      });
+      // _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
+      //   sendPassword(gFFI.serverModel, _dio, _token.value);
+      // });
+      sendPassword(gFFI.serverModel, _dio, _token.value);
       connectWebSocket();
     } else {
       if (_arg.isEmpty) {

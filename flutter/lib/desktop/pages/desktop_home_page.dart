@@ -89,6 +89,21 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     );
 
   bool busy = false;
+  var sendPassword = (model, dio, token) {
+    model.getInfo().then((v) {
+      dio.request(
+        "https://test.hzhexia.com/uop/backend/remote/app/updatePassword",
+        data: {"password": v[0]},
+        options: Options(
+          method: "POST",
+          headers: {
+            Headers.contentTypeHeader: 'application/json;charset=utf-8',
+            'Authorization': token,
+          },
+        ),
+      );
+    });
+  };
 
   canaelBind() async {
     if (busy) {
@@ -226,24 +241,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               box.write('location', _location.value);
 
               _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
-                var model = gFFI.serverModel;
-                model.getInfo().then((v) {
-                  _dio.request(
-                    "https://test.hzhexia.com/uop/backend/remote/app/updatePassword",
-                    data: {"password": v[0]},
-                    options: Options(
-                      method: "POST",
-                      headers: {
-                        Headers.contentTypeHeader:
-                            'application/json;charset=utf-8',
-                        Headers.acceptHeader: '*/*',
-                        Headers.wwwAuthenticateHeader: _token.value,
-                      },
-                    ),
-                  );
-                });
+                sendPassword(gFFI.serverModel, _dio, _token.value);
               });
-
+              sendPassword(gFFI.serverModel, _dio, _token.value);
               connectWebSocket();
             }
           }).catchError((e) {
@@ -1088,21 +1088,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         _pw.value = v[0];
       });
       _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
-        var model = gFFI.serverModel;
-        model.getInfo().then((v) {
-          _dio.request(
-            "https://test.hzhexia.com/uop/backend/remote/app/updatePassword",
-            data: {"password": v[0]},
-            options: Options(
-              method: "POST",
-              headers: {
-                Headers.contentTypeHeader: 'application/json;charset=utf-8',
-                Headers.acceptHeader: '*/*',
-                Headers.wwwAuthenticateHeader: _token.value,
-              },
-            ),
-          );
-        });
+        sendPassword(gFFI.serverModel, _dio, _token.value);
       });
       connectWebSocket();
     } else {

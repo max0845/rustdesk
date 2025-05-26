@@ -29,7 +29,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart' as window_size;
-import 'package:ws/ws.dart';
+import 'package:web_socket_channel/io.dart';
 import '../widgets/button.dart';
 
 class DesktopHomePage extends StatefulWidget {
@@ -143,14 +143,19 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     busy = false;
   }
 
-  WebSocketClient? channel;
+  IOWebSocketChannel? channel;
 
   connectWebSocket() async {
     if (channel != null) {
-      channel = WebSocketClient(WebSocketOptions.vm(headers: {
-        'Authorization': _token.value,
-      }));
+      channel = IOWebSocketChannel.connect(
+        "wss://test.hzhexia.com/websocket",
+        headers: {
+          'Authorization': _token,
+        },
+      );
     }
+
+    await channel!.ready;
 
     channel!.stream.listen((event) {
       print(event);
@@ -160,9 +165,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       debugPrint("WebSocket closed");
     });
 
-    channel!.connect("wss://test.hzhexia.com/websocket");
-
-    channel!.add({
+    channel!.sink.add({
       "timestamp": DateTime.now().millisecondsSinceEpoch,
       "bizType": "cds.websocket.login1",
       "body": jsonEncode({
@@ -171,7 +174,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     }); // login
 
     _timer3 = Timer.periodic(const Duration(seconds: 30), (_) {
-      channel!.add({
+      channel!.sink.add({
         "timestamp": DateTime.now().millisecondsSinceEpoch,
         "bizType": "cds.websocket.remoteAppHeartBeat1"
       }); // heartbeat
@@ -1266,7 +1269,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     Get.delete<RxBool>(tag: 'stop-service');
     _updateTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
-    channel?.close();
+    channel?.sink.close();
     channel = null;
     _timer2?.cancel();
     _timer3?.cancel();

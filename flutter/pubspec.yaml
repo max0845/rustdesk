@@ -109,7 +109,7 @@ dependencies:
   dio: ^5.8.0+1
   flutter_switch: ^0.3.2
   get_storage: ^2.1.1
-  ws: ^1.0.0
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   icons_launcher: ^2.0.4

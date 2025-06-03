@@ -30,6 +30,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:window_size/window_size.dart' as window_size;
 import 'package:web_socket_channel/io.dart';
+import '../../common.dart';
 import '../widgets/button.dart';
 
 class DesktopHomePage extends StatefulWidget {
@@ -320,9 +321,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                                 value: _on1.value,
                                 onToggle: (bool value) {
                                   _on1.value = value;
-                                  if (value) {
+                                  if (value && !_on2.value) {
                                     _on2.value = true;
+                                    start_service(_on1.value);
                                   }
+                                  
                                 },
                               ),
                             ).marginOnly(right: 10),
@@ -338,6 +341,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         onTap: () {
                           if (_on1.value) return;
                           _on2.value = !_on2.value;
+                          start_service(_on2.value);
                         },
                         child: Container(
                           width: 150,

@@ -1078,13 +1078,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
   @override
   void initState() {
-
-    timer4 = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        
-      }
-    });
-
     var flag = false;
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();

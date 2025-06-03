@@ -90,21 +90,26 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     );
 
   bool busy = false;
-  var sendPassword = (model, dio, token) {
+  String _old = "";
+
+  void sendPassword(model, dio, token) {
     model.getInfo().then((v) {
-      dio.request(
-        "https://test.hzhexia.com/uop/backend/remote/app/updatePassword",
-        data: {"password": v[0]},
-        options: Options(
-          method: "POST",
-          headers: {
-            Headers.contentTypeHeader: 'application/json;charset=utf-8',
-            'Authorization': token,
-          },
-        ),
-      );
+      if (v[0] != _old) {
+        _old = v[0];
+        dio.request(
+          "https://test.hzhexia.com/uop/backend/remote/app/updatePassword",
+          data: {"password": v[0]},
+          options: Options(
+            method: "POST",
+            headers: {
+              Headers.contentTypeHeader: 'application/json;charset=utf-8',
+              'Authorization': token,
+          }),
+        );
+      }
+      
     });
-  };
+  }
 
   canaelBind() async {
     if (busy) {
@@ -244,9 +249,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               box.write('clientNo', _clientNo.value);
               box.write('location', _location.value);
 
-              // _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
-              // sendPassword(gFFI.serverModel, _dio, _token.value);
-              // });
+              _timer2 = Timer.periodic(const Duration(seconds: 5), (_) {
+                  sendPassword(gFFI.serverModel, _dio, _token.value);
+              });
               sendPassword(gFFI.serverModel, _dio, _token.value);
               connectWebSocket();
             }
@@ -441,7 +446,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                       Text("门店名称: ${_orgName.value}", style: style),
                       Text("位置描述: ${_location.value}", style: style),
                       Text("id: ${_id.value}", style: style),
-                      Text("pw: ${_pw.value}", style: style),
+                      Obx(()=>Text("pw: ${_pw.value}", style: style)),
                     ],
                   ),
                 )
@@ -1073,13 +1078,19 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
   @override
   void initState() {
+
+    timer4 = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        
+      }
+    });
+
+    var flag = false;
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();
     if (ctrl.arg != null) {
       _arg.value = ctrl.arg!;
-      List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
-      connect(context, parm[0],
-          isFileTransfer: false, isViewCamera: false, password: parm[1]);
+      flag = true;
     }
 
     _token.value = box.read('token') ?? "";
@@ -1251,6 +1262,14 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       });
     }
     WidgetsBinding.instance.addObserver(this);
+    if(flag){
+      windowManager.hide().then((_){
+        List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
+        connect(context, parm[0],
+          isFileTransfer: false, isViewCamera: false, password: parm[1]);   
+      });
+      
+    }
   }
 
   _updateWindowSize() {

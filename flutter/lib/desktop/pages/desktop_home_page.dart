@@ -80,6 +80,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   final RxString _pw = ''.obs;
   final RxBool _on1 = false.obs;
   final RxBool _on2 = false.obs;
+  final RxBool flag = false.obs;
   Timer? _timer3;
 
   final Dio _dio = Dio()
@@ -275,7 +276,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       color: Colors.black,
       decoration: TextDecoration.none,
     );
-    return Stack(
+    return Obx(() => flag.value ? SizedBox() : Stack(
       children: [
         Positioned(
           top: MediaQuery.of(context).size.height * 0.5 - 200,
@@ -326,8 +327,10 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                                 value: _on1.value,
                                 onToggle: (bool value) {
                                   _on1.value = value;
+                                  box.write('on1', value);
                                   if (value && !_on2.value) {
                                     _on2.value = true;
+                                    box.write('on2', true);
                                     start_service(_on1.value);
                                   }
                                   
@@ -346,6 +349,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                         onTap: () {
                           if (_on1.value) return;
                           _on2.value = !_on2.value;
+                          box.write('on2', _on2.value);
                           start_service(_on2.value);
                         },
                         child: Container(
@@ -453,7 +457,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               : const SizedBox(),
         ),
       ],
-    );
+    ));
   }
 
   // ignore: unused_element
@@ -1078,14 +1082,16 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
   @override
   void initState() {
-    var flag = false;
+    
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();
     if (ctrl.arg != null) {
       _arg.value = ctrl.arg!;
-      flag = true;
+      flag.value = true;
     }
-
+    _on1.value = box.read('on1') ?? false;
+    _on2.value = box.read('on2') ?? false;
+    start_service(_on1.value);
     _token.value = box.read('token') ?? "";
     if (_token.value.isNotEmpty) {
       _orgId.value = box.read('orgId') ?? "";
@@ -1255,12 +1261,20 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       });
     }
     WidgetsBinding.instance.addObserver(this);
-    if(flag){
-      windowManager.hide().then((_){
-        List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
-        connect(context, parm[0],
-          isFileTransfer: false, isViewCamera: false, password: parm[1]);   
-      });
+    if(flag.value){
+      List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
+        // connect(context, parm[0],
+        //   isFileTransfer: false, isViewCamera: false, password: parm[1]);
+         connectMainDesktop(
+          parm[0],
+          isFileTransfer: false,
+          isViewCamera: false,
+          isTcpTunneling: false,
+          isRDP: false,
+          password: parm[1],
+          forceRelay: false,
+        );     
+      
       
     }
   }

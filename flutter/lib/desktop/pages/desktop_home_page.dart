@@ -331,7 +331,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                                   if (value && !_on2.value) {
                                     _on2.value = true;
                                     box.write('on2', true);
-                                    start_service(_on1.value);
+                                    //(_on1.value);
                                   }
                                   
                                 },
@@ -350,7 +350,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                           if (_on1.value) return;
                           _on2.value = !_on2.value;
                           box.write('on2', _on2.value);
-                          start_service(_on2.value);
+                          //start_service(_on2.value);
                         },
                         child: Container(
                           width: 150,
@@ -1091,7 +1091,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     }
     _on1.value = box.read('on1') ?? false;
     _on2.value = box.read('on2') ?? false;
-    start_service(_on1.value);
+    //start_service(_on1.value);
     _token.value = box.read('token') ?? "";
     if (_token.value.isNotEmpty) {
       _orgId.value = box.read('orgId') ?? "";

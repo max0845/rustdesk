@@ -350,7 +350,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                           if (_on1.value) return;
                           _on2.value = !_on2.value;
                           box.write('on2', _on2.value);
-                          //start_service(_on2.value);
+                          start_service(_on2.value);
                         },
                         child: Container(
                           width: 150,
@@ -1265,7 +1265,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
         // connect(context, parm[0],
         //   isFileTransfer: false, isViewCamera: false, password: parm[1]);
-         connectMainDesktop(
+        rustDeskWinManager.closeAllSubWindows();
+        connectMainDesktop(
           parm[0],
           isFileTransfer: false,
           isViewCamera: false,

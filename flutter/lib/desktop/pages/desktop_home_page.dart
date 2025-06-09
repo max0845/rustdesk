@@ -1265,7 +1265,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
         // connect(context, parm[0],
         //   isFileTransfer: false, isViewCamera: false, password: parm[1]);
-        rustDeskWinManager.closeAllSubWindows();
+        windowManager.hide();
         connectMainDesktop(
           parm[0],
           isFileTransfer: false,

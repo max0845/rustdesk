@@ -92,7 +92,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
   bool busy = false;
   String _old = "";
-
   void sendPassword(model, dio, token) {
     model.getInfo().then((v) {
       if (v[0] != _old) {
@@ -107,8 +106,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               'Authorization': token,
           }),
         );
-      }
-      
+      }    
     });
   }
 
@@ -1084,11 +1082,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   void initState() {
     
     super.initState();
-    DesktopTabController ctrl = Get.find<DesktopTabController>();
-    if (ctrl.arg != null) {
-      _arg.value = ctrl.arg!;
-      flag.value = true;
-    }
     _on1.value = box.read('on1') ?? false;
     _on2.value = box.read('on2') ?? false;
     //start_service(_on1.value);
@@ -1104,9 +1097,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
         _id.value = v[1];
         _pw.value = v[0];
       });
-      // _timer2 = Timer.periodic(const Duration(seconds: 30), (_) {
-      //   sendPassword(gFFI.serverModel, _dio, _token.value);
-      // });
+      _timer2 = Timer.periodic(const Duration(seconds: 1), (_) {
+        sendPassword(gFFI.serverModel, _dio, _token.value);
+      });
       sendPassword(gFFI.serverModel, _dio, _token.value);
       connectWebSocket();
     } else {
@@ -1261,23 +1254,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       });
     }
     WidgetsBinding.instance.addObserver(this);
-    if(flag.value){
-      List<String> parm = _arg.value.replaceFirst("connect://", "").split("/");
-        // connect(context, parm[0],
-        //   isFileTransfer: false, isViewCamera: false, password: parm[1]);
-        windowManager.hide();
-        connectMainDesktop(
-          parm[0],
-          isFileTransfer: false,
-          isViewCamera: false,
-          isTcpTunneling: false,
-          isRDP: false,
-          password: parm[1],
-          forceRelay: false,
-        );     
-      
-      
-    }
   }
 
   _updateWindowSize() {

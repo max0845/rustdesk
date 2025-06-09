@@ -109,7 +109,8 @@ Future<void> main(List<String> args) async {
     if (isMacOS) {
       disableWindowMovable(kWindowId);
     }
-    runMainApp(true, arg: args.first);
+    runRemoter(args.first);
+    //runMainApp(true, arg: args.first);
   } else {
     desktopType = DesktopType.main;
     await windowManager.ensureInitialized();
@@ -147,7 +148,7 @@ void runMainApp(bool startService, {String? arg}) async {
   }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App(arg: arg));
+  runApp(App());
 
   // Set window option.
   WindowOptions windowOptions =
@@ -376,10 +377,32 @@ void _runApp(
   ));
 }
 
-void runInstallPage() async {
+void runInstallPage() async{
   await windowManager.ensureInitialized();
   await initEnv(kAppTypeMain);
   _runApp('', const InstallPage(), MyTheme.currentThemeMode());
+   WindowOptions windowOptions =
+      getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true);
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+    windowManager.show();
+    windowManager.focus();
+    windowManager.setOpacity(1);
+    windowManager.setAlignment(Alignment.center); // ensure
+  });  
+}
+
+void runRemoter(String arg) async {
+  await windowManager.ensureInitialized();
+  await initEnv(kAppTypeMain);
+  List<String> parm = arg.replaceFirst("connect://", "").split("/");
+  await connectMainDesktop(
+        parm[0],
+        password: parm[1],
+        isFileTransfer: false,
+        isViewCamera: false,
+        isRDP: false,
+        isTcpTunneling: false,
+      );
   WindowOptions windowOptions =
       getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true);
   windowManager.waitUntilReadyToShow(windowOptions, () async {

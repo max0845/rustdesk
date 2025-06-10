@@ -105,12 +105,8 @@ Future<void> main(List<String> args) async {
   } else if (args.isNotEmpty && args.first.contains("connect://")) {
     desktopType = DesktopType.main;
     await windowManager.ensureInitialized();
-    windowManager.setPreventClose(true);
-    if (isMacOS) {
-      disableWindowMovable(kWindowId);
-    }
     runRemoter(args.first);
-    //runMainApp(true, arg: args.first);
+    
   } else {
     desktopType = DesktopType.main;
     await windowManager.ensureInitialized();
@@ -403,14 +399,6 @@ void runRemoter(String arg) async {
         isRDP: false,
         isTcpTunneling: false,
       );
-  WindowOptions windowOptions =
-      getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true);
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    windowManager.show();
-    windowManager.focus();
-    windowManager.setOpacity(1);
-    windowManager.setAlignment(Alignment.center); // ensure
-  });
 }
 
 WindowOptions getHiddenTitleBarWindowOptions(

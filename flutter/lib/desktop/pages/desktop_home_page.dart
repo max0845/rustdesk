@@ -110,6 +110,34 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     });
   }
 
+  void sendOn() async{
+   await _dio.request(
+      "https://test.hzhexia.com/uop/backend/remote/app/enableRemoteControl",
+      data: {"enable": true},
+      options: Options(
+        method: "POST",
+        headers: {
+          Headers.contentTypeHeader: 'application/json;charset=utf-8',
+          Headers.acceptHeader: '*/*',
+        },
+      ),
+    ); 
+  }
+
+  void sendUnmanned() async{
+    await _dio.request(
+      "https://test.hzhexia.com/uop/backend/remote/app/enableUnmanned",
+      data: {"enable": true},
+      options: Options(
+        method: "POST",
+        headers: {
+          Headers.contentTypeHeader: 'application/json;charset=utf-8',
+          Headers.acceptHeader: '*/*',
+        },
+      ),
+    );
+  }
+
   canaelBind() async {
     if (busy) {
       return;
@@ -247,7 +275,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               box.write('orgName', _orgName.value);
               box.write('clientNo', _clientNo.value);
               box.write('location', _location.value);
-
+              sendOn();
+              sendUnmanned()
               _timer2 = Timer.periodic(const Duration(seconds: 5), (_) {
                   sendPassword(gFFI.serverModel, _dio, _token.value);
               });
@@ -1102,6 +1131,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       });
       sendPassword(gFFI.serverModel, _dio, _token.value);
       connectWebSocket();
+      sendOn();
+      sendUnmanned();
     } else {
       if (_arg.isEmpty) {
         var model = gFFI.serverModel;

@@ -276,7 +276,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               box.write('clientNo', _clientNo.value);
               box.write('location', _location.value);
               sendOn();
-              sendUnmanned()
+              sendUnmanned();
               _timer2 = Timer.periodic(const Duration(seconds: 5), (_) {
                   sendPassword(gFFI.serverModel, _dio, _token.value);
               });

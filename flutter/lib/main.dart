@@ -394,7 +394,7 @@ void runRemoter(String arg) async {
   List<String> parm = arg.replaceFirst("connect://", "").split("/");
   _runApp('', RemotePage(id: parm[0],password: parm[1],), MyTheme.currentThemeMode());
   WindowOptions windowOptions =
-      getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true);
+      getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true, alwaysOnTop: true, isShowTitle: true);
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     windowManager.show();
     windowManager.focus();
@@ -415,12 +415,17 @@ WindowOptions getHiddenTitleBarWindowOptions(
     {bool isMainWindow = false,
     Size? size,
     bool center = false,
-    bool? alwaysOnTop}) {
+    bool? alwaysOnTop,
+    bool isShowTitle = false}) {
   var defaultTitleBarStyle = TitleBarStyle.hidden;
   // we do not hide titlebar on win7 because of the frame overflow.
   if (kUseCompatibleUiMode) {
     defaultTitleBarStyle = TitleBarStyle.normal;
   }
+  if (isShowTitle) {
+    defaultTitleBarStyle = TitleBarStyle.normal;
+  }
+
   return WindowOptions(
     size: size,
     center: center,

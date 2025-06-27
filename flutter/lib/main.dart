@@ -27,6 +27,7 @@ import 'common.dart';
 import 'consts.dart';
 import 'mobile/pages/home_page.dart';
 import 'mobile/pages/server_page.dart';
+import 'mobile/pages/remote_page.dart';
 import 'models/platform_model.dart';
 
 import 'package:flutter_hbb/plugin/handlers.dart'
@@ -391,14 +392,23 @@ void runRemoter(String arg) async {
   await windowManager.ensureInitialized();
   await initEnv(kAppTypeMain);
   List<String> parm = arg.replaceFirst("connect://", "").split("/");
-  await connectMainDesktop(
-        parm[0],
-        password: parm[1],
-        isFileTransfer: false,
-        isViewCamera: false,
-        isRDP: false,
-        isTcpTunneling: false,
-      );
+  _runApp('', RemotePage(id: parm[0],password: parm[1],), MyTheme.currentThemeMode());
+  WindowOptions windowOptions =
+      getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true);
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    windowManager.show();
+    windowManager.focus();
+    windowManager.setOpacity(1);
+    windowManager.setAlignment(Alignment.center);
+  });
+  // await connectMainDesktop(
+  //       parm[0],
+  //       password: parm[1],
+  //       isFileTransfer: false,
+  //       isViewCamera: false,
+  //       isRDP: false,
+  //       isTcpTunneling: false,
+  //     );
 }
 
 WindowOptions getHiddenTitleBarWindowOptions(

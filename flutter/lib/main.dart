@@ -391,18 +391,10 @@ void runInstallPage() async{
 void runRemoter(String arg) async {
   await windowManager.ensureInitialized();
   await initEnv(kAppTypeMain);
-  List<String> parm = arg.replaceFirst("connect://", "").split("/");
- _runApp('', App(arg: "t"), MyTheme.currentThemeMode());
- await connectMainDesktop(
-        parm[0],
-        password: parm[1],
-        isFileTransfer: false,
-        isViewCamera: false,
-        isRDP: false,
-        isTcpTunneling: false,
-      );
+ 
+ _runApp('', App(arg: arg), MyTheme.currentThemeMode());
   WindowOptions windowOptions =
-      getHiddenTitleBarWindowOptions(size: Size(300, 300), center: true, alwaysOnTop: false, isShowTitle: true);
+      getHiddenTitleBarWindowOptions(isMainWindow: true,center: true, alwaysOnTop: false, isShowTitle: true);
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     windowManager.show();
     windowManager.minimize();

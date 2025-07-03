@@ -1117,9 +1117,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();
-    if (ctrl.arg!.isNotEmpty && ctrl.arg == "t") {
+    if (ctrl.arg!.isNotEmpty) {
       flag.value = true;
-      return;
     }
     _on1.value = box.read('on1') ?? false;
     _on2.value = box.read('on2') ?? false;

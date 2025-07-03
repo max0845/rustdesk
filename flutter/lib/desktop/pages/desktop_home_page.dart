@@ -1117,9 +1117,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();
-    // if (ctrl.arg!.isNotEmpty) {
-    //   flag.value = true;
-    // }
+    if (ctrl.arg!.isNotEmpty) {
+      flag.value = true;
+      List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
+      connect(context, parm[0],password: parm[1]);
+    }
     _on1.value = box.read('on1') ?? false;
     _on2.value = box.read('on2') ?? false;
     //start_service(_on1.value);

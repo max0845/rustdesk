@@ -145,7 +145,12 @@ void runMainApp(bool startService, {String? arg}) async {
   }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App(arg: arg));
+  if(arg != null){
+    runApp(App(arg: arg));
+  } else {
+    runApp(App());
+  }
+  
 
   // Set window option.
   WindowOptions windowOptions =

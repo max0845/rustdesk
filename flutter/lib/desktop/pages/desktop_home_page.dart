@@ -471,6 +471,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text("${bind.mainIsInstalled() ? "install": "uninstall"}",style: style),
                       Text("联网状态: 联网", style: style),
                       Text("终端编号: ${_clientNo.value}", style: style),
                       Text("门店编号: ${_orgNo.value}", style: style),

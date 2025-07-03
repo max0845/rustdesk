@@ -392,7 +392,15 @@ void runRemoter(String arg) async {
   await windowManager.ensureInitialized();
   await initEnv(kAppTypeMain);
   List<String> parm = arg.replaceFirst("connect://", "").split("/");
-  _runApp('', RemotePage(id: parm[0],password: parm[1],), MyTheme.currentThemeMode());
+ // _runApp('', RemotePage(id: parm[0],password: parm[1],), MyTheme.currentThemeMode());
+ await connectMainDesktop(
+        parm[0],
+        password: parm[1],
+        isFileTransfer: false,
+        isViewCamera: false,
+        isRDP: false,
+        isTcpTunneling: false,
+      );
   WindowOptions windowOptions =
       getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true, alwaysOnTop: true, isShowTitle: true);
   windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -401,14 +409,7 @@ void runRemoter(String arg) async {
     windowManager.setOpacity(1);
     windowManager.setAlignment(Alignment.center);
   });
-  // await connectMainDesktop(
-  //       parm[0],
-  //       password: parm[1],
-  //       isFileTransfer: false,
-  //       isViewCamera: false,
-  //       isRDP: false,
-  //       isTcpTunneling: false,
-  //     );
+  
 }
 
 WindowOptions getHiddenTitleBarWindowOptions(

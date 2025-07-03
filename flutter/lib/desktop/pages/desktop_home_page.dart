@@ -303,7 +303,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       color: Colors.black,
       decoration: TextDecoration.none,
     );
-    return Obx(() => flag.value ? SizedBox() : Stack(
+    return Obx(() => flag.value ? Column(children: [
+      Center(
+        child: Image.asset('assets/logo.png', width: 200, height: 200)
+      )
+    ],) : Stack(
       children: [
         Positioned(
           top: MediaQuery.of(context).size.height * 0.5 - 200,
@@ -1112,6 +1116,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   void initState() {
     
     super.initState();
+    DesktopTabController ctrl = Get.find<DesktopTabController>();
+    if (ctrl.arg!.isNotEmpty && ctrl.arg == "t") {
+      flag.value = true;
+      return;
+    }
     _on1.value = box.read('on1') ?? false;
     _on2.value = box.read('on2') ?? false;
     //start_service(_on1.value);

@@ -160,13 +160,19 @@ void runMainApp(bool startService, {String? arg}) async {
       windowManager.hide();
     } else {
       windowManager.show();
-      windowManager.focus();
+      if(arg != null){
+        windowManager.minimize();
+      }else{
+        windowManager.focus();
+      }
+      
       // Move registration of active main window here to prevent from async visible check.
       rustDeskWinManager.registerActiveWindow(kWindowMainId);
     }
     windowManager.setOpacity(1);
     windowManager.setTitle(getWindowName());
     // Do not use `windowManager.setResizable()` here.
+    
     setResizable(!bind.isIncomingOnly());
   });
 }

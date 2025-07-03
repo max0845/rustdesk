@@ -106,7 +106,7 @@ Future<void> main(List<String> args) async {
   } else if (args.isNotEmpty && args.first.contains("connect://")) {
     desktopType = DesktopType.main;
     await windowManager.ensureInitialized();
-    runRemoter(args.first);
+    runMainApp(true,arg: args.first);
     
   } else {
     desktopType = DesktopType.main;
@@ -145,7 +145,7 @@ void runMainApp(bool startService, {String? arg}) async {
   }
   await Future.wait([gFFI.abModel.loadCache(), gFFI.groupModel.loadCache()]);
   gFFI.userModel.refreshCurrentUser();
-  runApp(App());
+  runApp(App(arg: arg));
 
   // Set window option.
   WindowOptions windowOptions =
@@ -386,20 +386,6 @@ void runInstallPage() async{
     windowManager.setOpacity(1);
     windowManager.setAlignment(Alignment.center); // ensure
   });  
-}
-
-void runRemoter(String arg) async {
-  await windowManager.ensureInitialized();
-  await initEnv(kAppTypeMain);
- 
- _runApp('', App(arg: arg), MyTheme.currentThemeMode());
-  WindowOptions windowOptions =
-      getHiddenTitleBarWindowOptions(isMainWindow: true,center: true, alwaysOnTop: false, isShowTitle: true);
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    windowManager.show();
-    windowManager.minimize();
-  });
-  
 }
 
 WindowOptions getHiddenTitleBarWindowOptions(

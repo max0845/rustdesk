@@ -402,12 +402,10 @@ void runRemoter(String arg) async {
         isTcpTunneling: false,
       );
   WindowOptions windowOptions =
-      getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true, alwaysOnTop: true, isShowTitle: true);
+      getHiddenTitleBarWindowOptions(size: Size(800, 600), center: true, alwaysOnTop: false, isShowTitle: true);
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     windowManager.show();
-    windowManager.focus();
-    windowManager.setOpacity(1);
-    windowManager.setAlignment(Alignment.center);
+    windowManager.minimize();
   });
   
 }

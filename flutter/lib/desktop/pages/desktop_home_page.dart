@@ -331,49 +331,49 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                       )
                     : const SizedBox(),
               ),
-              Obx(
-                () => _token.value.isNotEmpty
-                    ? Container(
-                        width: 200,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "无人值守",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                decoration: TextDecoration.none,
-                              ),
-                            ).marginOnly(left: 10),
-                            SizedBox(
-                              width: 40,
-                              height: 20,
-                              child: FlutterSwitch(
-                                toggleSize: 20.0,
-                                value: _on1.value,
-                                onToggle: (bool value) {
-                                  _on1.value = value;
-                                  box.write('on1', value);
-                                  if (value && !_on2.value) {
-                                    _on2.value = true;
-                                    box.write('on2', true);
-                                    //(_on1.value);
-                                  }
+              // Obx(
+              //   () => _token.value.isNotEmpty
+              //       ? Container(
+              //           width: 200,
+              //           height: 40,
+              //           decoration: BoxDecoration(
+              //             color: Colors.white,
+              //             borderRadius: BorderRadius.circular(8),
+              //           ),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               const Text(
+              //                 "无人值守",
+              //                 style: TextStyle(
+              //                   fontSize: 14,
+              //                   color: Colors.black,
+              //                   decoration: TextDecoration.none,
+              //                 ),
+              //               ).marginOnly(left: 10),
+              //               SizedBox(
+              //                 width: 40,
+              //                 height: 20,
+              //                 child: FlutterSwitch(
+              //                   toggleSize: 20.0,
+              //                   value: _on1.value,
+              //                   onToggle: (bool value) {
+              //                     _on1.value = value;
+              //                     box.write('on1', value);
+              //                     if (value && !_on2.value) {
+              //                       _on2.value = true;
+              //                       box.write('on2', true);
+              //                       //(_on1.value);
+              //                     }
                                   
-                                },
-                              ),
-                            ).marginOnly(right: 10),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
-              ),
+              //                   },
+              //                 ),
+              //               ).marginOnly(right: 10),
+              //             ],
+              //           ),
+              //         )
+              //       : const SizedBox(),
+              // ),
               const SizedBox(height: 15),
               Obx(
                 () => _token.value.isNotEmpty
@@ -468,27 +468,27 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                 )
               : const SizedBox(),
         ),
-        Obx(
-          () => _token.value.isNotEmpty
-              ? Positioned(
-                  bottom: 20,
-                  left: 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("联网状态: 联网", style: style),
-                      Text("终端编号: ${_clientNo.value}", style: style),
-                      Text("终端类型: ${_clientType.value}", style: style),
-                      Text("门店编号: ${_orgNo.value}", style: style),
-                      Text("门店名称: ${_orgName.value}", style: style),
-                      Text("位置描述: ${_location.value}", style: style),
-                      Text("id: ${_id.value}", style: style),
-                      Text("pw: ${_pw.value}", style: style),
-                    ],
-                  ),
-                )
-              : const SizedBox(),
-        ),
+        // Obx(
+        //   () => _token.value.isNotEmpty
+        //       ? Positioned(
+        //           bottom: 20,
+        //           left: 50,
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Text("联网状态: 联网", style: style),
+        //               Text("终端编号: ${_clientNo.value}", style: style),
+        //               Text("终端类型: ${_clientType.value}", style: style),
+        //               Text("门店编号: ${_orgNo.value}", style: style),
+        //               Text("门店名称: ${_orgName.value}", style: style),
+        //               Text("位置描述: ${_location.value}", style: style),
+        //               Text("id: ${_id.value}", style: style),
+        //               Text("pw: ${_pw.value}", style: style),
+        //             ],
+        //           ),
+        //         )
+        //       : const SizedBox(),
+        // ),
       ],
     ));
   }
@@ -1297,9 +1297,9 @@ class _DesktopHomePageState extends State<DesktopHomePage>
 
     if (ctrl.arg!.isNotEmpty) {
       flag.value = true;
-    //   List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
-    //   connect(context, parm[0],password: parm[1]);
-    }  
+      List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
+      connect(context, parm[0],password: parm[1]);
+    } 
   }
 
   _updateWindowSize() {

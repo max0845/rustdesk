@@ -78,6 +78,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   final RxString _location = ''.obs;
   final RxString _id = ''.obs;
   final RxString _pw = ''.obs;
+  final RxString _clientType = ''.obs;
   final RxBool _on1 = false.obs;
   final RxBool _on2 = false.obs;
   final RxBool flag = false.obs;
@@ -161,6 +162,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     _orgName.value = "";
     _clientNo.value = "";
     _location.value = "";
+    _clientType.value = "";
 
     box.remove('token');
     box.remove('orgId');
@@ -168,6 +170,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     box.remove('orgName');
     box.remove('clientNo');
     box.remove('location');
+    box.remove('clientType');
 
     var model = gFFI.serverModel;
     model.getInfo().then((v) {
@@ -266,6 +269,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               _orgName.value = value.data['data']['orgName'];
               _clientNo.value = value.data['data']['clientNo'];
               _location.value = value.data['data']['location'];
+              _clientType.value = value.data['data']['clientType'];
               _id.value = id;
               _pw.value = pw;
 
@@ -275,6 +279,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
               box.write('orgName', _orgName.value);
               box.write('clientNo', _clientNo.value);
               box.write('location', _location.value);
+              box.write('clientType', _clientType.value);
               sendOn();
               sendUnmanned();
               _timer2 = Timer.periodic(const Duration(seconds: 5), (_) {
@@ -315,12 +320,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
           child: Column(
             children: [
               Image.asset('assets/logo.png', width: 200, height: 200),
-              Obx(() => Text(_arg.value,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    decoration: TextDecoration.none,
-                  ))),
               Obx(
                 () => _qrcode.value.isNotEmpty
                     ? QrImageView(
@@ -478,6 +477,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                       //Text("${bind.mainIsInstalled() ? "install": "uninstall"}",style: style),
                       Text("联网状态: 联网", style: style),
                       Text("终端编号: ${_clientNo.value}", style: style),
+                      Text("终端类型: ${_clientType.value}", style: style),
                       Text("门店编号: ${_orgNo.value}", style: style),
                       Text("门店名称: ${_orgName.value}", style: style),
                       Text("位置描述: ${_location.value}", style: style),
@@ -1132,6 +1132,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       _orgName.value = box.read('orgName') ?? "";
       _clientNo.value = box.read('clientNo') ?? "";
       _location.value = box.read('location') ?? "";
+      _clientType.value = box.read('clientType') ?? "";
       var model = gFFI.serverModel;
       model.getInfo().then((v) {
         _id.value = v[1];

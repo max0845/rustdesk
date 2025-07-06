@@ -309,6 +309,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       decoration: TextDecoration.none,
     );
     return Obx(() => flag.value ? Column(children: [
+      Text("connecting...", style: style),
       Center(
         child: Image.asset('assets/logo.png', width: 200, height: 200)
       )
@@ -474,7 +475,6 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //Text("${bind.mainIsInstalled() ? "install": "uninstall"}",style: style),
                       Text("联网状态: 联网", style: style),
                       Text("终端编号: ${_clientNo.value}", style: style),
                       Text("终端类型: ${_clientType.value}", style: style),
@@ -482,7 +482,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
                       Text("门店名称: ${_orgName.value}", style: style),
                       Text("位置描述: ${_location.value}", style: style),
                       Text("id: ${_id.value}", style: style),
-                      Obx(()=>Text("pw: ${_pw.value}", style: style)),
+                      Text("pw: ${_pw.value}", style: style),
                     ],
                   ),
                 )
@@ -1117,11 +1117,12 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();
-    if (ctrl.arg!.isNotEmpty) {
-      flag.value = true;
-      List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
-      connect(context, parm[0],password: parm[1]);
-    }
+    flag.value = false;
+    //if (ctrl.arg!.isNotEmpty) {
+      //flag.value = true;
+      //List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
+      //connect(context, parm[0],password: parm[1]);
+    //}
     _on1.value = box.read('on1') ?? false;
     _on2.value = box.read('on2') ?? false;
     //start_service(_on1.value);

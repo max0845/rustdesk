@@ -313,7 +313,8 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       Center(
         child: Image.asset('assets/logo.png', width: 200, height: 200)
       )
-    ],) : Stack(
+    ],) :
+    Stack(
       children: [
         Positioned(
           top: MediaQuery.of(context).size.height * 0.5 - 200,
@@ -1117,13 +1118,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     
     super.initState();
     DesktopTabController ctrl = Get.find<DesktopTabController>();
-   if (ctrl.arg!.isNotEmpty) {
-      flag.value = true;
-      List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
-      connect(context, parm[0],password: parm[1]);
-    } else {
-       flag.value = false;
-    }
+   
     _on1.value = box.read('on1') ?? false;
     _on2.value = box.read('on2') ?? false;
     //start_service(_on1.value);
@@ -1299,6 +1294,12 @@ class _DesktopHomePageState extends State<DesktopHomePage>
       });
     }
     WidgetsBinding.instance.addObserver(this);
+
+    // if (ctrl.arg!.isNotEmpty) {
+    //   flag.value = true;
+    //   List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
+    //   connect(context, parm[0],password: parm[1]);
+    // } 
   }
 
   _updateWindowSize() {

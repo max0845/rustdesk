@@ -81,7 +81,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
   final RxString _clientType = ''.obs;
   final RxBool _on1 = false.obs;
   final RxBool _on2 = false.obs;
-  final RxBool flag = false.obs;
+  final RxBool flag = true.obs;
   Timer? _timer3;
 
   final Dio _dio = Dio()
@@ -1295,11 +1295,11 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     }
     WidgetsBinding.instance.addObserver(this);
 
-    if (ctrl.arg!.isNotEmpty) {
-      flag.value = true;
-      List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
-      connect(context, parm[0],password: parm[1]);
-    } 
+    // if (ctrl.arg!.isNotEmpty) {
+    //   flag.value = true;
+    //   List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
+    //   connect(context, parm[0],password: parm[1]);
+    // } 
   }
 
   _updateWindowSize() {

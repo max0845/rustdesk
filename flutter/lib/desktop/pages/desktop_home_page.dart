@@ -1296,7 +1296,7 @@ class _DesktopHomePageState extends State<DesktopHomePage>
     WidgetsBinding.instance.addObserver(this);
 
     // if (ctrl.arg!.isNotEmpty) {
-    //   flag.value = true;
+        flag.value = false;
     //   List<String> parm = ctrl.arg!.replaceFirst("connect://", "").split("/");
     //   connect(context, parm[0],password: parm[1]);
     // } 
